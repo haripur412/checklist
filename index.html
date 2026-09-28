@@ -370,7 +370,7 @@
     const majorAreas = {
         "FGC System": ["FGC Area", "FGC-A", "FGC-B", "FGC-C", "UAT", "SUT"],
 
-        "GT & Auxiliaries": ["GTB", "GT Seal Oil System", "GT Control Oil System", "GT Lube Oil System", "GT Control Package A", "GT Control Package B", "Casing Cooling and TCA"],
+        "GT & Auxiliaries": ["GTB", "GT Seal Oil Pump", "GT Seal Oil Vacuum Pump", "GT Control Oil System", "GT Lube Oil System", "GT Control Package A", "GT Control Package B", "Casing Cooling and TCA"],
 
         "HRSG System": ["HRSG System", "HRSG and CT Dosing Pump", "CPH System", "BFP-A", "BFP-B", "Deaerator Pump", "HP Bypass HPU", "Diverter Damper", "H2 Generator and Compressor", "Sampling System Room", "Air Compressor A", "Air Compressor B", "Air Compressor C", "Air Dryer and Receiver"],
 
@@ -483,6 +483,7 @@
         "FF Mechanical/Electrical Valve Position_Opened_Closed_Traveling",
         "FF Alarm Check_No Alarm_Alarm Exists",
         "AC Condition on SFC Room_Cooling_Not Cooling_Tripped",
+        "SFC Thyristor Temperature(max)",
         "SFC's Alarm_No Alarm_Alarm Existss",
         "GCB Alarm_No Alarm_Alarm Existss",
         "IPB System_Normal_Abnormal",
@@ -492,7 +493,7 @@
         "Sump Pump Check_Normal_ High Temperature_High Noise_High Vibration",
         "Any Other Abnormalities~text"
     ],
-    "GT Seal Oil System": [
+    "GT Seal Oil Pump": [
         "Seal Oil Pump Running_A_B_E",
         "Seal Oil Pump Discharge Pressure",
         "Seal Oil Pump_Normal_ High Temp_High Noise_High Vibration",
@@ -510,6 +511,15 @@
         "Loop Seal Tank Vapour Extractor Pressure",
         "Loop Seal Tank Vapour Extractor_Normal_ High Temp_High Noise_High Vibration",
         "Standby SOP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Any Other Abnormalities~text"
+    ],
+    "GT Seal Oil Vacuum Pump": [
+        "Vacuum Pump Running_Old_New",
+        "Vacuum Pump Condition_Normal_ High Temp_High Noise_High Vibration",
+        "Vacuum Motor Condition_Normal_ High Temp_High Noise_High Vibration",
+        "Vacuum Tank Pressure",
+        "Vacuum Pump Oil Level_Normal_Above Normal_Below Normal",
+        "Vacuum Tank Separator Drain_Drained_Normal",
         "Any Other Abnormalities~text"
     ],
     "GT Control Oil System": [
@@ -623,7 +633,7 @@
         "Lube Oil Tank Level_No Leakage_Little Leakage_High Leakage",
         "Lube Oil Pump Selection Condition Check_Normal_Abnormal",
         "Driving Non-Driving End Temperature_Normal_High",
-        "Cooling Water Line Valve_Opened_Closed_Traveling",
+        "Cooling Water Line Valve_Opened_Closed_Partial",
         "Any Leakage_No Leakage_No Leakage_Water_Steam_Oil",
         "BFP Motor_Normal_ High Temperature_High Noise_High Vibration",
         "BFP Pump_Normal_ High Temperature_High Noise_High Vibration",
@@ -640,7 +650,8 @@
         "Lube Oil Tank Level_No Leakage_Little Leakage_High Leakage",
         "Lube Oil Pump Selection Condition Check_Normal_Abnormal",
         "Driving Non-Driving End Temperature_Normal_High",
-        "Cooling Water Line Valve_Opened_Closed_Traveling",
+        "Cooling Water Line Valve_Opened_Closed_Partial",
+        "Service Water Valve_Opened_Closed_Partial",
         "Any Leakage_No Leakage_No Leakage_Water_Steam_Oil",
         "BFP Motor_Normal_ High Temperature_High Noise_High Vibration",
         "BFP Pump_Normal_ High Temperature_High Noise_High Vibration",
@@ -661,6 +672,7 @@
     ],
     "HP Bypass HPU": [
         "Pump Running_A_B",
+        "Pump Selection_Auto_Manual",
         "Motor_Normal_ High Temperature_High Noise_High Vibration",
         "Oil Level_Normal_Above Normal_Below Normal",
         "Oil Temperature",
@@ -816,6 +828,7 @@
     ],
     "CEP A": [
         "Cond Make Up LCV Isolation Valve_Opened_Closed_Traveling",
+        "Flash Tank LCV Manual Valve_Opened_CLosed_Partial",
         "Oil Level_Normal_Above Normal_Below Normal",
         "Suction Strainer DP",
         "Cooling Water Pressure",
@@ -831,6 +844,7 @@
     ],
     "CEP B": [
         "Cond Make Up LCV Isolation Valve_Opened_Closed_Traveling",
+        "Flash Tank LCV Manual Valve_Opened_CLosed_Partial",
         "Oil Level_Normal_Above Normal_Below Normal",
         "Suction Strainer DP",
         "Cooling Water Pressure",
@@ -937,6 +951,7 @@
     ],
     "IP/LP Bypass HPU": [
         "Pump Running_A_B",
+        "Pump Selection_Auto_Manual",
         "Motor_Normal_ High Temperature_High Noise_High Vibration",
         "Oil Level_Normal_Above Normal_Below Normal",
         "Oil Temperature",
@@ -968,7 +983,10 @@
         "Temperature_Normal_Abnormal",
         "Discharge Pressure",
         "Oil Level_Normal_Above Normal_Below Normal",
+        "Thrust Bearing Cooling water Flow_Normal_Abnormal_Dirty Sight Glass",
+        "Seal Water Pressure",
         "Seal and Lube Filter DP",
+        "Lube water Flow_Normal_Abnormal_Dirty Sight Glass",
         "Service Water Valve_Opened_Closed_Traveling",
         "Gland Leakage_Normal_High_Low_No Leakage_No Leakage",
         "NRV Oil Level_Normal_Above Normal_Below Normal",
@@ -986,7 +1004,10 @@
         "Temperature_Normal_Abnormal",
         "Discharge Pressure",
         "Oil Level_Normal_Above Normal_Below Normal",
+        "Thrust Bearing Cooling water Flow_Normal_Abnormal_Dirty Sight Glass",
+        "Seal Water Pressure",
         "Seal and Lube Filter DP",
+        "Lube water Flow_Normal_Abnormal_Dirty Sight Glass",
         "Service Water Valve_Opened_Closed_Traveling",
         "Gland Leakage_Normal_High_Low_No Leakage_No Leakage",
         "NRV Oil Level_Normal_Above Normal_Below Normal",
@@ -1004,7 +1025,10 @@
         "Temperature_Normal_Abnormal",
         "Discharge Pressure",
         "Oil Level_Normal_Above Normal_Below Normal",
+        "Thrust Bearing Cooling water Flow_Normal_Abnormal_Dirty Sight Glass",
+        "Seal Water Pressure",
         "Seal and Lube Filter DP",
+        "Lube water Flow_Normal_Abnormal_Dirty Sight Glass",
         "Service Water Valve_Opened_Closed_Traveling",
         "Gland Leakage_Normal_High_Low_No Leakage_No Leakage",
         "NRV Oil Level_Normal_Above Normal_Below Normal",
@@ -1113,6 +1137,7 @@
         "Noise_Normal_Abnormal",
         "Temperature_Normal_Abnormal",
         "Discharge Pressure",
+        "Discharge FCV Bypass valve_Open_Closed",
         "Any Other Abnormalities~text"
     ],
     "FF Sump Pump": [
@@ -1126,51 +1151,51 @@
         "Any Other Abnormalities~text"
     ],
     "CT Fan 1": [
-        "Current", "Frequency", "Space Heater_ON_Off", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
+        "Current", "Frequency", "Space Heater_Off_ON", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
         "Motor Temperature_Normal_Abnormal", "Vibration_Normal_Abnormal", "Noise_Normal_Abnormal"
     ],
     "CT Fan 2": [
-        "Current", "Frequency", "Space Heater_ON_Off", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
+        "Current", "Frequency", "Space Heater_Off_ON", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
         "Motor Temperature_Normal_Abnormal", "Vibration_Normal_Abnormal", "Noise_Normal_Abnormal"
     ],
     "CT Fan 3": [
-        "Current", "Frequency", "Space Heater_ON_Off", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
+        "Current", "Frequency", "Space Heater_Off_ON", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
         "Motor Temperature_Normal_Abnormal", "Vibration_Normal_Abnormal", "Noise_Normal_Abnormal"
     ],
     "CT Fan 4": [
-        "Current", "Frequency", "Space Heater_ON_Off", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
+        "Current", "Frequency", "Space Heater_Off_ON", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
         "Motor Temperature_Normal_Abnormal", "Vibration_Normal_Abnormal", "Noise_Normal_Abnormal"
     ],
     "CT Fan 5": [
-        "Current", "Frequency", "Space Heater_ON_Off", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
+        "Current", "Frequency", "Space Heater_Off_ON", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
         "Motor Temperature_Normal_Abnormal", "Vibration_Normal_Abnormal", "Noise_Normal_Abnormal"
     ],
     "CT Fan 6": [
-        "Current", "Frequency", "Space Heater_ON_Off", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
+        "Current", "Frequency", "Space Heater_Off_ON", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
         "Motor Temperature_Normal_Abnormal", "Vibration_Normal_Abnormal", "Noise_Normal_Abnormal"
     ],
     "CT Fan 7": [
-        "Current", "Frequency", "Space Heater_ON_Off", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
+        "Current", "Frequency", "Space Heater_Off_ON", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
         "Motor Temperature_Normal_Abnormal", "Vibration_Normal_Abnormal", "Noise_Normal_Abnormal"
     ],
     "CT Fan 8": [
-        "Current", "Frequency", "Space Heater_ON_Off", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
+        "Current", "Frequency", "Space Heater_Off_ON", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
         "Motor Temperature_Normal_Abnormal", "Vibration_Normal_Abnormal", "Noise_Normal_Abnormal"
     ],
     "CT Fan 9": [
-        "Current", "Frequency", "Space Heater_ON_Off", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
+        "Current", "Frequency", "Space Heater_Off_ON", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
         "Motor Temperature_Normal_Abnormal", "Vibration_Normal_Abnormal", "Noise_Normal_Abnormal"
     ],
     "CT Fan 10": [
-        "Current", "Frequency", "Space Heater_ON_Off", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
+        "Current", "Frequency", "Space Heater_Off_ON", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
         "Motor Temperature_Normal_Abnormal", "Vibration_Normal_Abnormal", "Noise_Normal_Abnormal"
     ],
     "CT Fan 11": [
-        "Current", "Frequency", "Space Heater_ON_Off", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
+        "Current", "Frequency", "Space Heater_Off_ON", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
         "Motor Temperature_Normal_Abnormal", "Vibration_Normal_Abnormal", "Noise_Normal_Abnormal"
     ],
     "CT Fan 12": [
-        "Current", "Frequency", "Space Heater_ON_Off", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
+        "Current", "Frequency", "Space Heater_Off_ON", "Breaker Condition_Remote and Auto_Local_Manual", "Alarm Check_No Alarm_Alarm Exists", "Oil Level_Normal_Above Normal_Below Normal",
         "Motor Temperature_Normal_Abnormal", "Vibration_Normal_Abnormal", "Noise_Normal_Abnormal"
     ],
     "6.6 KV Current": [
