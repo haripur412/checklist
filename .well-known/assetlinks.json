@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "io.github.haripur412.twa",
-        "sha256_cert_fingerprints": ["EF:69:E9:16:D4:E8:57:1B:DE:F1:81:89:99:B4:01:2B:A5:66:FE:8C:E4:90:C6:24:B4:73:59:86:DD:D3:35:94"]
-      }
-    }]
