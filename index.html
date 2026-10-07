@@ -217,6 +217,9 @@
             font-weight: 600;
             cursor: pointer;
             transition: background-color 0.2s;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
         }
 
         .app-footer button:hover {
@@ -236,6 +239,23 @@
         }
         .instructions-list li {
             margin-bottom: 8px;
+        }
+        .debug-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-bottom: 6px;
+            background-color: #fff;
+            font-size: 0.85rem;
+        }
+        .debug-list-item .debug-time {
+            color: var(--secondary-color);
+            font-size: 0.78rem;
+            white-space: nowrap;
+            margin-left: 10px;
         }
     </style>
 </head>
@@ -293,7 +313,7 @@
     <button type="button" onclick="showInstructions()">
     Instructions
 </button>
-    <button type="button" onclick="showInfo()">
+    <button type="button" id="infoBtn">
     Info
 </button>
     <button type="button" onclick="showCredits()">
@@ -351,6 +371,28 @@
             <p style="margin: 0;"><strong style="color: var(--secondary-dark);">Checklist preparation:</strong><br>Md. Shamim Hossain, Md. Samsul Haque, Imtiaz Ur Rahman, Al Jead Sabu</p>
         </div>
         <button class="btn" onclick="closeCredits()">Close</button>
+    </div>
+</div>
+
+<!-- Debug Passkey Modal (shown before the debug panel, on long-press Info) -->
+<div id="debugPasskeyModal" class="modal-overlay hidden">
+    <div class="modal-card">
+        <h3 style="margin-top: 0; font-size: 1.1rem; color: var(--primary-dark);">Enter Passkey</h3>
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 14px;">This area is for the developer team only.</p>
+        <input type="password" id="debugPasskeyInput" placeholder="Passkey" style="margin-bottom: 8px;" onkeydown="if(event.key==='Enter') submitDebugPasskey();">
+        <p id="debugPasskeyError" class="hidden" style="color: #c0392b; font-size: 0.8rem; margin: 0 0 10px 0;">Incorrect passkey.</p>
+        <button class="btn" onclick="submitDebugPasskey()" style="margin-top: 0; margin-bottom: 10px;">Submit</button>
+        <button class="btn btn-secondary" onclick="closeDebugPasskeyModal()" style="margin-top: 0; margin-bottom: 0;">Cancel</button>
+    </div>
+</div>
+
+<!-- Debug Panel Modal (submission log — shown after correct passkey) -->
+<div id="debugPanelModal" class="modal-overlay hidden">
+    <div class="modal-card" style="max-width: 460px; max-height: 80vh; display: flex; flex-direction: column;">
+        <h3 style="margin-top: 0; font-size: 1.1rem; color: var(--primary-dark);">Submission Log (Debug)</h3>
+        <p style="font-size: 0.78rem; color: var(--secondary-color); margin-top: -8px; margin-bottom: 12px;">Equipment names and the date &amp; time each was submitted. This log is kept separately and is not cleared when entries are submitted.</p>
+        <div id="debugPanelList" style="overflow-y: auto; flex: 1; margin-bottom: 16px;"></div>
+        <button class="btn" onclick="closeDebugPanel()" style="margin-top: 0;">Close</button>
     </div>
 </div>
 
@@ -1306,6 +1348,141 @@
         document.getElementById('creditsModal').classList.add('hidden');
     }
 
+    // --- Submission Log (persistent, separate from the saved/not-yet-submitted data) ---
+    // Equipment data itself (localStorage keyed by equipment name) is still deleted on
+    // successful submission, same as before. This log is a separate record, under its
+    // own key, that just remembers "name + when it was submitted" and is NOT cleared
+    // when the equipment data is removed, so it survives for debugging purposes.
+    const SUBMISSION_LOG_KEY = '__submission_log__';
+
+    const SUBMISSION_LOG_MAX_AGE_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+    function getSubmissionLog() {
+        let log;
+        try {
+            log = JSON.parse(localStorage.getItem(SUBMISSION_LOG_KEY) || '[]');
+        } catch (e) {
+            log = [];
+        }
+        // Drop entries older than 24 hours, and persist the pruned list so expired
+        // entries don't keep getting re-read on every call.
+        const cutoff = Date.now() - SUBMISSION_LOG_MAX_AGE_MS;
+        const pruned = log.filter(entry => (entry.ts || 0) > cutoff);
+        if (pruned.length !== log.length) {
+            localStorage.setItem(SUBMISSION_LOG_KEY, JSON.stringify(pruned));
+        }
+        return pruned;
+    }
+
+    function addToSubmissionLog(equipmentName) {
+        const log = getSubmissionLog(); // already pruned of anything older than 24h
+        log.unshift({
+            name: equipmentName,
+            ts: Date.now(),
+            submittedAt: new Date().toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })
+        });
+        localStorage.setItem(SUBMISSION_LOG_KEY, JSON.stringify(log));
+    }
+
+    // --- Debug Passkey Gate ---
+    // Simple client-side passkey to keep this away from casual taps. Note this is NOT
+    // real security (anyone could read it from the page source) — it's just a soft gate
+    // to stop accidental/curious access, not a protection against a determined user.
+    const DEBUG_PASSKEY = "412haripur";
+
+    function requestDebugPasskey() {
+        document.getElementById('debugPasskeyInput').value = '';
+        document.getElementById('debugPasskeyError').classList.add('hidden');
+        document.getElementById('debugPasskeyModal').classList.remove('hidden');
+        document.getElementById('debugPasskeyInput').focus();
+    }
+
+    function closeDebugPasskeyModal() {
+        document.getElementById('debugPasskeyModal').classList.add('hidden');
+    }
+
+    function submitDebugPasskey() {
+        const entered = document.getElementById('debugPasskeyInput').value;
+        if (entered === DEBUG_PASSKEY) {
+            closeDebugPasskeyModal();
+            showDebugPanel();
+        } else {
+            document.getElementById('debugPasskeyError').classList.remove('hidden');
+        }
+    }
+
+    // --- Debug Panel Functions (long-press on Info button, after passkey) ---
+    // Shows the persistent submission log — equipment name + the date & time it was
+    // successfully submitted — not the currently-saved (not-yet-submitted) items, since
+    // those already have their own view ("View & Submit Saved Entries") and get cleared
+    // on submit.
+    function showDebugPanel() {
+        const listContainer = document.getElementById('debugPanelList');
+        listContainer.innerHTML = '';
+
+        const log = getSubmissionLog();
+
+        if (log.length === 0) {
+            listContainer.innerHTML = `<p style="text-align:center; color:#888; font-style:italic; font-size:0.85rem;">No submissions recorded yet.</p>`;
+        } else {
+            log.forEach(entry => {
+                const row = document.createElement('div');
+                row.className = 'debug-list-item';
+                row.innerHTML = `<span>${entry.name}</span><span class="debug-time">${entry.submittedAt}</span>`;
+                listContainer.appendChild(row);
+            });
+        }
+
+        document.getElementById('debugPanelModal').classList.remove('hidden');
+    }
+
+    function closeDebugPanel() {
+        document.getElementById('debugPanelModal').classList.add('hidden');
+    }
+
+    // --- Long-press detection for the Info button ---
+    // Short tap -> showInfo(); long press (600ms) -> requestDebugPasskey() instead,
+    // and the resulting click/tap is suppressed so Info doesn't also open.
+    (function setupInfoButtonLongPress() {
+        const infoBtn = document.getElementById('infoBtn');
+        let pressTimer = null;
+        let longPressFired = false;
+
+        function startPress() {
+            longPressFired = false;
+            pressTimer = setTimeout(() => {
+                longPressFired = true;
+                requestDebugPasskey();
+            }, 600);
+        }
+
+        function cancelPress() {
+            clearTimeout(pressTimer);
+        }
+
+        infoBtn.addEventListener('touchstart', startPress, { passive: true });
+        infoBtn.addEventListener('touchend', cancelPress);
+        infoBtn.addEventListener('touchmove', cancelPress);
+        infoBtn.addEventListener('mousedown', startPress);
+        infoBtn.addEventListener('mouseup', cancelPress);
+        infoBtn.addEventListener('mouseleave', cancelPress);
+
+        infoBtn.addEventListener('click', (e) => {
+            if (longPressFired) {
+                // Long press already handled this interaction; don't also open Info.
+                e.preventDefault();
+                e.stopPropagation();
+                longPressFired = false;
+                return;
+            }
+            showInfo();
+        });
+
+        // Prevent the default browser long-press context menu (e.g. "Share", text
+        // selection popup) from appearing over the button on mobile.
+        infoBtn.addEventListener('contextmenu', (e) => e.preventDefault());
+    })();
+
     // --- Message Modal Functions (replaces native alert(), which shows the site URL as its title) ---
     function showMessage(title, text) {
         document.getElementById('messageModalTitle').innerText = title;
@@ -1520,7 +1697,9 @@
 
         const formData = new FormData(event.target);
         const savedObject = {
-            savedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            // Full date + time (not just time), so the debug panel and saved list
+            // can show exactly when each equipment was saved.
+            savedAt: new Date().toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })
         };
 
         for (let [key, value] of formData.entries()) {
@@ -1645,6 +1824,7 @@
                 console.log(`Submitted ${eq.sheetName} — server replied:`, responseText);
 
                 localStorage.removeItem(eq.sheetName);
+                addToSubmissionLog(eq.sheetName);
                 successCount++;
             } catch (err) {
                 // Genuine network failure — the request never made it out, so keep the
