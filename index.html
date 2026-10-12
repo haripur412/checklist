@@ -271,11 +271,20 @@
         </p>
         <button class="btn" onclick="showMajorAreas()">Check Equipment</button>
         <button class="btn btn-secondary" onclick="openSavedList()">View & Submit Saved Entries</button>
+        <button class="btn btn-secondary" onclick="showSubmittedToday()">Submitted Today</button>
+    </div>
+
+    <!-- Submitted Today View -->
+    <div id="submittedTodayView" class="hidden">
+        <button class="btn btn-secondary" onclick="history.back()" style="margin-bottom: 16px;">← Back to Home</button>
+        <h3>Submitted Today</h3>
+        <p style="font-size: 0.8rem; color: var(--secondary-color); margin-top: -8px;">This list clears automatically at the start of the next day.</p>
+        <div id="submittedTodayList"></div>
     </div>
 
     <!-- Major Areas View -->
     <div id="majorAreaView" class="hidden">
-        <button class="btn btn-secondary" onclick="showHome()" style="margin-bottom: 16px;">← Back to Home</button>
+        <button class="btn btn-secondary" onclick="history.back()" style="margin-bottom: 16px;">← Back to Home</button>
         <input type="text" id="globalSearchInput" placeholder="Search equipment across all areas..." oninput="handleGlobalSearch()" style="margin-bottom: 16px;">
         <div id="globalSearchResults" class="hidden"></div>
         <div id="majorAreaSection">
@@ -286,14 +295,14 @@
 
     <!-- Equipment List View -->
     <div id="equipmentListView" class="hidden">
-        <button class="btn btn-secondary" onclick="showMajorAreas()" style="margin-bottom: 16px;">← Back to Areas</button>
+        <button class="btn btn-secondary" onclick="history.back()" style="margin-bottom: 16px;">← Back to Areas</button>
         <h3 id="selectedAreaTitle">Equipment List</h3>
         <div id="equipmentList"></div>
     </div>
 
     <!-- Inspection Form View -->
     <div id="formView" class="hidden">
-        <button class="btn btn-secondary" onclick="showEquipmentList()" style="margin-bottom: 16px;">← Back to Equipment</button>
+        <button class="btn btn-secondary" onclick="history.back()" style="margin-bottom: 16px;">← Back to Equipment</button>
         <h3 id="selectedEquipmentTitle">Parameter Form</h3>
         <form id="equipmentForm" onsubmit="handleFormSave(event)">
             <div id="formFields"></div>
@@ -303,7 +312,7 @@
 
     <!-- Saved Submissions View -->
     <div id="savedSubmissionsView" class="hidden">
-        <button class="btn btn-secondary" onclick="showHome()" style="margin-bottom: 16px;">← Back to Home</button>
+        <button class="btn btn-secondary" onclick="history.back()" style="margin-bottom: 16px;">← Back to Home</button>
         <h3>Saved Inspections</h3>
         <div id="savedEquipmentList"></div>
         <button id="finalSubmitBtn" class="btn" onclick="confirmFinalSubmission()" style="margin-top: 16px;">Confirm & Finalize Submission</button>
@@ -1384,6 +1393,74 @@
         localStorage.setItem(SUBMISSION_LOG_KEY, JSON.stringify(log));
     }
 
+    // --- Submitted Today (user-facing, separate from the debug log above) ---
+    // Unlike the debug log (rolling 24h window, passkey-gated), this list resets on the
+    // calendar day — i.e. it clears the moment the device's date changes, not 24 hours
+    // after each entry. That matches "clears next day" rather than "expires 24h later".
+    const SUBMITTED_TODAY_KEY = '__submitted_today__';
+
+    function getTodayDateString() {
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    function getSubmittedToday() {
+        let store;
+        try {
+            store = JSON.parse(localStorage.getItem(SUBMITTED_TODAY_KEY) || 'null');
+        } catch (e) {
+            store = null;
+        }
+        const today = getTodayDateString();
+        if (!store || store.date !== today) {
+            // Either nothing stored yet, or the date has rolled over — reset.
+            store = { date: today, items: [] };
+            localStorage.setItem(SUBMITTED_TODAY_KEY, JSON.stringify(store));
+        }
+        return store.items;
+    }
+
+    function addToSubmittedToday(equipmentName) {
+        const today = getTodayDateString();
+        let store;
+        try {
+            store = JSON.parse(localStorage.getItem(SUBMITTED_TODAY_KEY) || 'null');
+        } catch (e) {
+            store = null;
+        }
+        if (!store || store.date !== today) {
+            store = { date: today, items: [] };
+        }
+        store.items.unshift({
+            name: equipmentName,
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+        localStorage.setItem(SUBMITTED_TODAY_KEY, JSON.stringify(store));
+    }
+
+    function showSubmittedToday() {
+        pushViewState({ view: 'submittedToday' });
+        hideAllViews();
+
+        const container = document.getElementById('submittedTodayList');
+        container.innerHTML = '';
+        const items = getSubmittedToday();
+
+        if (items.length === 0) {
+            container.innerHTML = `<p style="text-align: center; color: #888; font-style: italic;">No equipment submitted yet today.</p>`;
+        } else {
+            items.forEach(entry => {
+                const row = document.createElement('div');
+                row.className = 'list-item';
+                row.style.cursor = 'default';
+                row.innerHTML = `<span>${entry.name}</span><span class="status-badge">${entry.time}</span>`;
+                container.appendChild(row);
+            });
+        }
+
+        document.getElementById('submittedTodayView').classList.remove('hidden');
+    }
+
     // --- Debug Passkey Gate ---
     // Simple client-side passkey to keep this away from casual taps. Note this is NOT
     // real security (anyone could read it from the page source) — it's just a soft gate
@@ -1501,7 +1578,66 @@
         document.getElementById('equipmentListView').classList.add('hidden');
         document.getElementById('formView').classList.add('hidden');
         document.getElementById('savedSubmissionsView').classList.add('hidden');
+        document.getElementById('submittedTodayView').classList.add('hidden');
     }
+
+    // --- Back-button (History API) support ---
+    // Home and the footer modals (Instructions/Info/Credits/etc.) don't need this —
+    // they either are the root screen or already have their own Close buttons.
+    // Every other screen (major areas, equipment list, the inspection form, and the
+    // saved/submission screen) pushes a history entry when you navigate INTO it, so the
+    // phone's hardware/gesture back button (and the in-app "← Back to..." buttons, which
+    // now just call history.back()) take you to the previous screen instead of leaving
+    // the app or doing nothing.
+    let suppressHistoryPush = false;
+
+    // History always mirrors the PARENT chain, one entry per level (d = depth):
+    //   Home(0) > Major Areas / Saved / Submitted Today (1) > Equipment List (2) > Form (3)
+    // so Back (in-app button or phone) always returns to the parent screen.
+    const VIEW_DEPTH = { majorAreas: 1, saved: 1, submittedToday: 1, equipmentList: 2, form: 3 };
+
+    function pushViewState(state) {
+        if (!suppressHistoryPush) {
+            history.pushState({ ...state, d: VIEW_DEPTH[state.view] }, '');
+        }
+    }
+
+    // Return to Home from any depth in a single step, leaving no stale entries behind.
+    function goHome() {
+        const d = (history.state && history.state.d) || 0;
+        if (d > 0) {
+            history.go(-d);   // popstate handler then shows Home
+        } else {
+            showHome();
+        }
+    }
+
+    window.addEventListener('popstate', (event) => {
+        suppressHistoryPush = true;
+        const state = event.state || { view: 'home' };
+        switch (state.view) {
+            case 'majorAreas':
+                showMajorAreas();
+                break;
+            case 'equipmentList':
+                currentArea = state.area;
+                showEquipmentList();
+                break;
+            case 'form':
+                currentArea = state.area;
+                openEquipmentForm(state.equipment);
+                break;
+            case 'saved':
+                openSavedList();
+                break;
+            case 'submittedToday':
+                showSubmittedToday();
+                break;
+            default:
+                showHome();
+        }
+        suppressHistoryPush = false;
+    });
 
     function showHome() {
         hideAllViews();
@@ -1510,6 +1646,7 @@
     }
 
     function showMajorAreas() {
+        pushViewState({ view: 'majorAreas' });
         hideAllViews();
         const searchInput = document.getElementById('globalSearchInput');
         searchInput.value = '';
@@ -1584,6 +1721,8 @@
             `;
             item.onclick = () => {
                 if (parentArea) currentArea = parentArea;
+                // Keep history = parent chain: Areas > that area's list > form
+                history.pushState({ view: 'equipmentList', area: currentArea, d: 2 }, '');
                 openEquipmentForm(eqName);
             };
             resultsContainer.appendChild(item);
@@ -1592,6 +1731,7 @@
 
     function showEquipmentList(areaName) {
         if (areaName) currentArea = areaName;
+        pushViewState({ view: 'equipmentList', area: currentArea });
         hideAllViews();
 
         document.getElementById('selectedAreaTitle').innerText = `${currentArea} Equipment List`;
@@ -1620,6 +1760,7 @@
 
     function openEquipmentForm(eqName) {
         currentSelectedEquipment = eqName;
+        pushViewState({ view: 'form', equipment: eqName, area: currentArea });
         hideAllViews();
 
         const title = document.getElementById('selectedEquipmentTitle');
@@ -1708,10 +1849,17 @@
 
         localStorage.setItem(currentSelectedEquipment, JSON.stringify(savedObject));
         showMessage('Saved', `Data for "${currentSelectedEquipment}" saved locally!`);
-        showEquipmentList();
+        // Go back to the parent Equipment List (pops the form's history entry, so
+        // phone-Back from the list goes to Major Areas, not back into the form).
+        if (history.state && history.state.view === 'form') {
+            history.back();
+        } else {
+            showEquipmentList();
+        }
     }
 
     function openSavedList() {
+        pushViewState({ view: 'saved' });
         hideAllViews();
         const container = document.getElementById('savedEquipmentList');
         const submitBtn = document.getElementById('finalSubmitBtn');
@@ -1749,7 +1897,66 @@
     }
 
     // --- Submission Processing ---
+    // --- Shared submission plumbing (used by both the manual Submit button and the
+    // automatic background retry below) ---
+
+    // True while any submission (manual or automatic) is actively running, so the two
+    // can never run at the same time and double-send the same item.
+    let isSubmissionInProgress = false;
+
+    function getAllSavedEquipment() {
+        const allKeys = Object.keys(equipmentData);
+        const savedEquipments = [];
+        allKeys.forEach(eqKey => {
+            const item = localStorage.getItem(eqKey);
+            if (item) {
+                savedEquipments.push({ sheetName: eqKey, dataObj: JSON.parse(item) });
+            }
+        });
+        return savedEquipments;
+    }
+
+    // Sends one equipment's data. Resolves on any response (we don't care what the
+    // response text says — see the note further down); rejects only on a genuine
+    // network failure (request never left the device).
+    async function submitSingleEquipment(eq, username) {
+        const valuesArray = [];
+        for (const [key, val] of Object.entries(eq.dataObj)) {
+            if (key !== 'savedAt') {
+                valuesArray.push(val);
+            }
+        }
+
+        const payload = {
+            act: 'addData',
+            sheetName: eq.sheetName,
+            username: username,
+            data: valuesArray
+        };
+
+        const response = await fetch(APPSCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+        });
+
+        const responseText = await response.text().catch(() => '(no response body)');
+        console.log(`Submitted ${eq.sheetName} — server replied:`, responseText);
+    }
+
+    // Clears the equipment's local data and records it in both the debug log and the
+    // user-facing "Submitted Today" list. Shared by manual and automatic submission.
+    function recordSuccessfulSubmission(eqName) {
+        localStorage.removeItem(eqName);
+        addToSubmissionLog(eqName);
+        addToSubmittedToday(eqName);
+    }
+
     function confirmFinalSubmission() {
+        if (isSubmissionInProgress) {
+            showMessage('Notice', 'A submission is already in progress (possibly an automatic background sync). Please wait a moment and try again.');
+            return;
+        }
         const username = getStoredUsername();
         if (!username) {
             pendingSubmission = true;
@@ -1761,25 +1968,15 @@
 
     async function executeSubmissionProcess() {
         const username = getStoredUsername();
-        const allKeys = Object.keys(equipmentData);
         const submitBtn = document.getElementById('finalSubmitBtn');
-        const savedEquipments = [];
-
-        allKeys.forEach(eqKey => {
-            const item = localStorage.getItem(eqKey);
-            if (item) {
-                savedEquipments.push({
-                    sheetName: eqKey,
-                    dataObj: JSON.parse(item)
-                });
-            }
-        });
+        const savedEquipments = getAllSavedEquipment();
 
         if (savedEquipments.length === 0) {
             showMessage('Notice', 'No saved data to submit.');
             return;
         }
 
+        isSubmissionInProgress = true;
         submitBtn.disabled = true;
         submitBtn.innerText = "Submitting Data...";
 
@@ -1787,52 +1984,32 @@
         let failCount = 0;
         const failedItems = [];
 
-        for (const eq of savedEquipments) {
-            const valuesArray = [];
-            for (const [key, val] of Object.entries(eq.dataObj)) {
-                if (key !== 'savedAt') {
-                    valuesArray.push(val);
+        try {
+            for (const eq of savedEquipments) {
+                submitBtn.innerText = `Uploading "${eq.sheetName}"...`;
+
+                try {
+                    // We only care that the request reached the network and got a response —
+                    // not what the response text says. Apps Script sometimes replies slowly
+                    // or with something other than "Successful" even though it already wrote
+                    // the row, so waiting on an exact text match caused false "failed" results
+                    // for uploads that had, in fact, gone through. A thrown error here means
+                    // the request never left the phone (offline, DNS failure, etc.) — that is
+                    // the only case we still treat as a real failure.
+                    await submitSingleEquipment(eq, username);
+                    recordSuccessfulSubmission(eq.sheetName);
+                    successCount++;
+                } catch (err) {
+                    // Genuine network failure — the request never made it out, so keep the
+                    // data saved locally; the background auto-retry will pick it up once
+                    // connectivity returns, or the user can tap Submit again.
+                    console.error(`Network error submitting ${eq.sheetName}:`, err);
+                    failCount++;
+                    failedItems.push(eq.sheetName);
                 }
             }
-
-            const payload = {
-                act: 'addData',
-                sheetName: eq.sheetName,
-                username: username,
-                data: valuesArray
-            };
-
-            submitBtn.innerText = `Uploading "${eq.sheetName}"...`;
-
-            try {
-                // We only care that the request reached the network and got a response —
-                // not what the response text says. Apps Script sometimes replies slowly
-                // or with something other than "Successful" even though it already wrote
-                // the row, so waiting on an exact text match caused false "failed" results
-                // for uploads that had, in fact, gone through. A thrown error here means
-                // the request never left the phone (offline, DNS failure, etc.) — that is
-                // the only case we still treat as a real failure.
-                const response = await fetch(APPSCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8'
-                    },
-                    body: JSON.stringify(payload)
-                });
-
-                const responseText = await response.text().catch(() => '(no response body)');
-                console.log(`Submitted ${eq.sheetName} — server replied:`, responseText);
-
-                localStorage.removeItem(eq.sheetName);
-                addToSubmissionLog(eq.sheetName);
-                successCount++;
-            } catch (err) {
-                // Genuine network failure — the request never made it out, so keep the
-                // data saved locally for a retry.
-                console.error(`Network error submitting ${eq.sheetName}:`, err);
-                failCount++;
-                failedItems.push(eq.sheetName);
-            }
+        } finally {
+            isSubmissionInProgress = false;
         }
 
         submitBtn.disabled = false;
@@ -1843,15 +2020,73 @@
         } else {
             showMessage(
                 'Submission Complete',
-                `${successCount} uploaded successfully.\n\n${failCount} item(s) could not be sent due to a network error and are still saved on this device:\n${failedItems.join(', ')}\n\nCheck your connection and tap Submit again to retry these.`
+                `${successCount} uploaded successfully.\n\n${failCount} item(s) could not be sent due to a network error and are still saved on this device:\n${failedItems.join(', ')}\n\nThe app will keep trying these automatically in the background once your connection is back, or you can tap Submit again.`
             );
         }
 
-        showHome();
+        goHome();
     }
 
+    // --- Automatic background retry ---
+    // Silently tries to submit any saved equipment whenever a connection is available,
+    // without the user needing to open the app's Submit screen at all. Runs: once
+    // shortly after the app loads, whenever the device regains connectivity, and on a
+    // periodic timer as a fallback (some mobile browsers don't fire 'online' reliably,
+    // especially when the app isn't in the foreground).
+    //
+    // It stays completely silent (no popups) so it never interrupts whatever the user
+    // is doing — e.g. filling out a different equipment's form. Items that already have
+    // a saved username are the only ones eligible, since we can't silently prompt for a
+    // name. A genuine network failure on any item stops that pass early (no point
+    // hammering a dead connection); it will simply try again on the next trigger.
+    async function tryAutoSubmit() {
+        if (isSubmissionInProgress) return;
+
+        const username = getStoredUsername();
+        if (!username) return; // nothing we can silently submit without a name
+
+        if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+            return; // quick, cheap check — the real test is still the fetch itself
+        }
+
+        const savedEquipments = getAllSavedEquipment();
+        if (savedEquipments.length === 0) return;
+
+        isSubmissionInProgress = true;
+        let autoSuccessCount = 0;
+
+        try {
+            for (const eq of savedEquipments) {
+                try {
+                    await submitSingleEquipment(eq, username);
+                    recordSuccessfulSubmission(eq.sheetName);
+                    autoSuccessCount++;
+                } catch (err) {
+                    console.error(`Auto-submit: network error for ${eq.sheetName}, will retry later.`, err);
+                    break; // stop this pass; next trigger (timer/online) will try again
+                }
+            }
+        } finally {
+            isSubmissionInProgress = false;
+        }
+
+        if (autoSuccessCount > 0) {
+            console.log(`Auto-submit: ${autoSuccessCount} item(s) uploaded automatically in the background.`);
+        }
+    }
+
+    window.addEventListener('online', tryAutoSubmit);
+    setInterval(tryAutoSubmit, 30000); // fallback poll every 30s
+
     window.onload = function() {
+        // Establish Home as the base of the history stack (replaceState, not push) so
+        // the very first back-press from a pushed screen has a defined 'home' entry to
+        // land on, rather than leaving the app.
+        history.replaceState({ view: 'home' }, '');
         showHome();
+        // Give the page a moment to settle, then try an initial background submit in
+        // case there's saved data and we're already online from a previous offline save.
+        setTimeout(tryAutoSubmit, 3000);
     };
 </script>
 <script>
