@@ -425,9 +425,9 @@
 
         "HRSG System": ["HRSG System", "HRSG and CT Dosing Pump", "CPH System", "BFP-A", "BFP-B", "Deaerator Pump", "HP Bypass HPU", "Diverter Damper", "H2 Generator and Compressor", "Sampling System Room", "Air Compressor A", "Air Compressor B", "Air Compressor C", "Air Dryer and Receiver"],
 
-        "ST Building": ["CCWP and HEX", "CEP A", "CEP B", "Vacuum and Waterbox", "ST GCB and GSC", "ST LOP and JOP", "ST COP and Valves", "Steam Turbine", "IP/LP Bypass HPU"],
+        "ST Building": ["CCWP and HEX", "CEP A", "CEP B", "Vacuum and Waterbox", "ST GCB and GSC", "ST LOP and JOP", "ST COP and Valves", "Steam Turbine", "IP/LP Bypass HPU", "Switch Gear and Battery"],
 
-        "CT & CWP Area": ["EDG", "CWP A", "CWP B", "CWP C", "ACWP A", "ACWP B", "Cond Make Up Pump", "CT Make Up Pump", "Service Water Pump", "Jockey pump", "Electric Motor Fire Pump", "Diesel Engine Fire Pump", "Blow Down Pump", "FF Sump Pump"],
+        "CT & CWP Area": ["EDG", "CWP A", "CWP B", "CWP C", "ACWP A", "ACWP B", "Debris Filter", "Cond Make Up Pump", "CT Make Up Pump", "Service Water Pump", "Jockey pump", "Electric Motor Fire Pump", "Diesel Engine Fire Pump", "Blow Down Pump", "FF Sump Pump"],
 
         "CT Fans": ["CT Fan 1", "CT Fan 2", "CT Fan 3", "CT Fan 4", "CT Fan 5", "CT Fan 6", "CT Fan 7", "CT Fan 8", "CT Fan 9", "CT Fan 10", "CT Fan 11", "CT Fan 12"],
 
@@ -442,6 +442,7 @@
         "Drain and Vent Valve condition_Closed_Opened_Traveling",
         "Leakage Check_No Leakage_Air_Water_Oil_Gas",
         "FF System at GBC Area_Ready_Not Ready",
+        "FF Header Isolation Valves_Closed_Opened_Traveling",
         "Sump Pump Check_Normal_ High Temperature_High Noise_High Vibration",
         "Fuel Gas Supply System Alarm Check_No Alarm_Alarm Exists",
         "Fuel Gas Supply System Container AC Condition_Cooling_Not Cooling_Tripped",
@@ -463,7 +464,7 @@
         "Oil Mist Fan Inlet Pressure",
         "Oil Mist Fan Outlet Pressure",
         "Auxiliary Lube Oil Pump Pressure",
-        "Aux. Lube Oil Pump Condition_Normal_Abnormal",
+        "Aux. Lube Oil Pump Condition_Normal_Abnormal_Reverse Rotation",
         "Lube  Oil Temperature",
         "Cooler (Inlet/Outlet) Valve Condition_Opened_Closed_Traveling",
         "Seal Leakage Line_Hot_Cold",
@@ -481,7 +482,7 @@
         "Oil Mist Fan Inlet Pressure",
         "Oil Mist Fan Outlet Pressure",
         "Auxiliary Lube Oil Pump Pressure",
-        "Aux. Lube Oil Pump Condition_Normal_Abnormal",
+        "Aux. Lube Oil Pump Condition_Normal_Abnormal_Reverse Rotation",
         "Lube  Oil Temperature",
         "Cooler (Inlet/Outlet) Valve Condition_Opened_Closed_Traveling",
         "Seal Leakage Line_Hot_Cold",
@@ -499,7 +500,7 @@
         "Oil Mist Fan Inlet Pressure",
         "Oil Mist Fan Outlet Pressure",
         "Auxiliary Lube Oil Pump Pressure",
-        "Aux. Lube Oil Pump Condition_Normal_Abnormal",
+        "Aux. Lube Oil Pump Condition_Normal_Abnormal_Reverse Rotation",
         "Lube  Oil Temperature",
         "Cooler (Inlet/Outlet) Valve Condition_Opened_Closed_Traveling",
         "Seal Leakage Line_Hot_Cold",
@@ -525,6 +526,7 @@
         "SUT Oil Pump_Running_Stopped_Tripped",
         "SUT Oil Pump Condition_Normal_ High Temperature_High Noise_High Vibration",
         "Standby Oil Pump Breaker Condition_Remote and Ready_Local_Opened",
+        "FF Header Isolation Valves_Closed_Opened_Traveling",
         "Sump Pump Check_Normal_ High Temperature_High Noise_High Vibration",
         "Any Other Abnormalities~text"
     ],
@@ -541,6 +543,7 @@
         "IPB Pressure",
         "Roof Damper Check_Closed_Opened_Traveling",
         "Exhaust Fan Check_Running_Tripped",
+        "FF Header Isolation Valves_Closed_Opened_Traveling",
         "Sump Pump Check_Normal_ High Temperature_High Noise_High Vibration",
         "Any Other Abnormalities~text"
     ],
@@ -556,7 +559,7 @@
         "Seal Oil Drain Vent Valves Position_Closed_Opened_Traveling",
         "Loop Seal Tank Vapour Extractor Pressure",
         "Loop Seal Tank Vapour Extractor_Normal_ High Temp_High Noise_High Vibration",
-        "Standby SOP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby SOP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
         "Any Other Abnormalities~text"
     ],
     "GT Seal Oil Vacuum Pump": [
@@ -581,7 +584,7 @@
         "Control Oil Cleaning Unit KV",
         "Control Oil Cleaning Unit Current",
         "Any Leakage in System_No Leakage_Oil_Water",
-        "Standby COP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby COP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
         "Any Other Abnormalities~text"
     ],
     "GT Lube Oil System": [
@@ -602,13 +605,20 @@
         "Valve Position_Normal_Abnormal",
         "Mist Separator DP",
         "Leakage_No Leakage_Little Leakage_High Leakage",
-        "Standby LOP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby LOP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
         "Any Other Abnormalities~text"
     ],
     "GT Control Package A": [
         "AC Condition_Cooling_Not Cooling_Tripped",
         "All Breaker Condition_Normal_Abnormal",
         "Fire Fighting Alarm Check_No Alarm_Alarm Exists",
+        "Battery Room AC_Cooling_Not Cooling_Tripped",
+        "Battery Room Exhaust Fan_Running_Tripped",
+        "Room Temperature_Normal_High",
+        "Battery Water Level_Normal_Low",
+        "Battery Water Quality_Normal_Bubbling",
+        "Traces of Sparks_No Sparking Spot_Sparking Spot",
+        "Burning Smell_No Burning Smell_Burning Smell",
         "Any Other Abnormalities~text"
     ],
     "GT Control Package B": [
@@ -668,7 +678,7 @@
         "CPH Pump_Normal_ High Temperature_High Noise_High Vibration",
         "CPH Oil Level_Normal_Above Normal_Below Normal",
         "Any Leakage_No Leakage_Water_Oil_Steam",
-        "Standby CPHP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby CPHP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
         "Any Other Abnormalities~text"
     ],
     "BFP-A": [
@@ -685,7 +695,7 @@
         "BFP Pump_Normal_ High Temperature_High Noise_High Vibration",
         "Cooling Fan_Normal_ High Temperature_High Noise_High Vibration",
         "Standby Pump Space Heater_ON_Off",
-        "Standby BFP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby BFP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
         "Any Other Abnormalities~text"
     ],
     "BFP-B": [
@@ -703,7 +713,7 @@
         "BFP Pump_Normal_ High Temperature_High Noise_High Vibration",
         "Cooling Fan_Normal_ High Temperature_High Noise_High Vibration",
         "Standby Pump Space Heater_ON_Off",
-        "Standby BFP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby BFP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
         "Any Other Abnormalities~text"
     ],
     "Deaerator Pump": [
@@ -743,7 +753,7 @@
         "Oil Leakage_No Leakage_Little Leakage_High Leakage",
         "Alarm Check_No Alarm_Alarm Exists",
         "DD Package AC_Cooling_Not Cooling_Tripped",
-        "Standby Seal Air Fan Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby Seal Air Fan Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
         "Standby HPU Pump Condition_Breaker Abnormal_Auto and Ready_Valve Abnormal_Isolated",
         "Any Other Abnormalities~text"
     ],
@@ -766,7 +776,8 @@
         "Any Other Abnormalities~text"
     ],
     "Sampling System Room": [
-        "AC Condition_Cooling_Not Cooling_Tripped",
+        "CEMS Container AC Condition_Cooling_Not Cooling_Tripped",
+        "Sampling System Container AC Condition_Cooling_Not Cooling_Tripped",
         "Running Chiller Unit_A_B",
         "Main Pump Check_Normal_High Temperature_High Noise_High Vibration",
         "Water Level_Normal_Above Normal_Below Normal",
@@ -857,6 +868,7 @@
     ],
     "CCWP and HEX": [
         "STB FF System Check_Ready_Not Ready",
+        "FF Header Isolation Valves_Closed_Opened_Traveling",
         "Running CCWP_A_B",
         "Vibration_Normal_Abnormal",
         "Noise_Normal_Abnormal",
@@ -869,7 +881,7 @@
         "ACW Line Outlet Pressure",
         "Water leakage_No Leakage_Little Leakage_High Leakage",
         "Standby Pump Space Heater_ON_Off",
-        "Standby CCWP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby CCWP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
         "Any Other Abnormalities~text"
     ],
     "CEP A": [
@@ -885,7 +897,7 @@
         "Temperature_Normal_Abnormal",
         "Pump Vent Valve_Opened_Closed_Traveling",
         "Standby CEP Space Heater_ON_Off",
-        "Standby CEP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby CEP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
         "Any Other Abnormalities~text"
     ],
     "CEP B": [
@@ -901,7 +913,7 @@
         "Temperature_Normal_Abnormal",
         "Pump Vent Valve_Opened_Closed_Traveling",
         "Standby CEP Space Heater_ON_Off",
-        "Standby CEP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby CEP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
         "Any Other Abnormalities~text"
     ],
     "Vacuum and Waterbox": [
@@ -930,12 +942,12 @@
         "Generator CB Alarm_No Alarm_Alarm Exists",
         "Generator CCW Check_Opened_Closed_Traveling",
         "Running GSC Fan_A_B",
-        "Valve Position_Normal_Abnormal",
+        "GSC Inlet Valve Position_Opened_CLosed_Partially Opened",
         "Vibration_Normal_Abnormal",
         "Noise_Normal_Abnormal",
         "Temperature_Normal_Abnormal",
         "Steam Inlet Pressure",
-        "Loop Seal Valve Position",
+        "Loop Seal Spray Valve Position",
         "Loop Seal Water Drain_Normal_High_Low_No Leakage",
         "Water or Steam Leakage_No Leakage_Little Leakage_High Leakage",
         "Standby Fan Valve Position_Opened_Closed_Traveling",
@@ -954,11 +966,11 @@
         "Any Leakage in System_No Leakage_Oil_Water",
         "Running Vapour Extractor_A_B",
         "Vapour Extractor Condition_Normal_ High Temperature_High Noise_High Vibration",
-        "Running JOP_A_B",
+        "Running JOP_Off_A_B",
         "JOP Condition_Normal_ High Temperature_High Noise_High Vibration",
         "Discharge Pressure",
-        "Standby LOP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
-        "Standby JOP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby LOP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
+        "Standby JOP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
         "Any Other Abnormalities~text"
     ],
     "ST COP and Valves": [
@@ -970,7 +982,7 @@
         "Tank Level_Normal_Above Normal_Below Normal",
         "Radiator Fan Air Flow Check_Normal_Low",
         "Radiator Cleanliness Check_Clean_Dirty",
-        "Standby COP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby COP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
         "Oil Leakage Check_No Leakage_Little Leakage_High Leakage",
         "Oil Leakage Check at ASV ACV_No Leakage_Little Leakage_High Leakage",
         "Oil Leakage Check at MSV MCV_No Leakage_Little Leakage_High Leakage",
@@ -980,7 +992,7 @@
     ],
     "Steam Turbine": [
         "CCW Head Tank LCV Check_Normal_Abnormal",
-        "Turning Motor Check_Normal_Abnormal",
+        "Turning Motor Check_Off_Running_Abnormal",
         "Shaft Position",
         "HIP Casing Position",
         "HIP Rotor Position",
@@ -1009,6 +1021,20 @@
         "Oil Leakage_No Leakage_Little Leakage_High Leakage",
         "Breaker Position_Normal_Abnormal",
         "Alarm Check_No Alarm_Alarm Exists",
+        "Any Other Abnormalities~text"
+    ],
+    "Switch Gear and Battery": [
+        "HVAC Condition_Cooling_Not Cooling_Tripped",
+        "All Breaker Condition_Normal_Abnormal",
+        "Fire Fighting Alarm Check_No Alarm_Alarm Exists",
+        "Battery Room AC_Cooling_Not Cooling_Tripped",
+        "Battery Room Exhaust Fan_Running_Tripped",
+        "Room Temperature_Normal_High",
+        "Battery Water Level_Normal_Low",
+        "Battery Water Quality_Normal_Bubbling",
+        "Traces of Sparks_No Sparking Spot_Sparking Spot",
+        "Burning Smell_No Burning Smell_Burning Smell",
+        "CCB FF Header Isolation Valves_Closed_Opened_Traveling",
         "Any Other Abnormalities~text"
     ],
     "EDG": [
@@ -1041,7 +1067,7 @@
         "NRV Pump Selection_A_B",
         "NRV Pump Vibration_Normal_Abnormal",
         "Standby CWP Space Heater_ON_Off",
-        "Standby CWP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby CWP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
         "Any Other Abnormalities~text"
     ],
     "CWP B": [
@@ -1062,7 +1088,7 @@
         "NRV Pump Selection_A_B",
         "NRV Pump Vibration_Normal_Abnormal",
         "Standby CWP Space Heater_ON_Off",
-        "Standby CWP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby CWP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
         "Any Other Abnormalities~text"
     ],
     "CWP C": [
@@ -1083,7 +1109,7 @@
         "NRV Pump Selection_A_B",
         "NRV Pump Vibration_Normal_Abnormal",
         "Standby CWP Space Heater_ON_Off",
-        "Standby CWP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby CWP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
         "Any Other Abnormalities~text"
     ],
     "ACWP A": [
@@ -1097,7 +1123,7 @@
         "Gland Leakage_Normal_High_Low_No Leakage_No Leakage",
         "CT Basin Level_Normal_Above Normal_Below Normal",
         "Standby Pump Space Heater_ON_Off",
-        "Standby ACWP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby ACWP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
         "Any Other Abnormalities~text"
     ],
     "ACWP B": [
@@ -1111,7 +1137,16 @@
         "Gland Leakage_Normal_High_Low_No Leakage_No Leakage",
         "CT Basin Level_Normal_Above Normal_Below Normal",
         "Standby Pump Space Heater_ON_Off",
-        "Standby ACWP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated",
+        "Standby ACWP Condition_Auto and Ready_Valve Abnormal_Breaker Abnormal_Isolated_Reverse Rotation",
+        "Any Other Abnormalities~text"
+    ],
+    "Debris Filter": [
+        "Panel Alarm_No Alarm_Alarm Exists",
+        "Selection_Remote and Auto_Local_Manual",
+        "Bypass Valve Position_Closed_Opened_Traveling",
+        "Drain Valve Position_Closed_Opened_Traveling",
+        "Leakage_Normal_High_Low_No Leakage",
+        "Noise_Normal_Abnormal",
         "Any Other Abnormalities~text"
     ],
     "Cond Make Up Pump": [
@@ -1187,7 +1222,7 @@
         "Any Other Abnormalities~text"
     ],
     "FF Sump Pump": [
-        "Running Pump_A_B",
+        "Running Pump_Off_A_B",
         "Breaker Condition_Remote and Auto_Local_Manual", "Inlet Outlet Valve Position_Opened_Closed_Traveling",
         "Gland Leakage_Normal_High_Low_No Leakage",
         "Vibration_Normal_Abnormal",
