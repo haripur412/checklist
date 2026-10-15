@@ -431,7 +431,7 @@
 
         "CT Fans": ["CT Fan 1", "CT Fan 2", "CT Fan 3", "CT Fan 4", "CT Fan 5", "CT Fan 6", "CT Fan 7", "CT Fan 8", "CT Fan 9", "CT Fan 10", "CT Fan 11", "CT Fan 12"],
 
-        "Breaker Currents": ["6.6 KV Current", "Essential Switchboard", "GT Auxiliary", "CT Electric Building"]
+        "Breaker Currents": ["6.6 KV Current", "Essential Switchboard", "GT Auxiliary", "CT Electric Building", "Lighting System"]
     }
     const equipmentData = equipment_data = {
     "FGC Area": [
@@ -555,6 +555,8 @@
         "Seal Oil Level_Normal_Above Normal_Below Normal",
         "Seal Oil Temperature",
         "CCW Line Leakage_No Leakage_Little Leakage_High Leakage",
+        "Running HEX CCW Line Valve Condition_Opened_Closed_Partially Opened",
+        "Standby HEX CCW Line Valve Condition_Closed_Opened_Partially Opened",
         "Seal Oil Panel Alarm_No Alarm_Alarm Exists",
         "Seal Oil Drain Vent Valves Position_Closed_Opened_Traveling",
         "Loop Seal Tank Vapour Extractor Pressure",
@@ -578,7 +580,8 @@
         "Control Oil Pump Discharge Pressure",
         "Control Oil Level",
         "Control Oil Temperature",
-        "Control Oil Cooling System_Opened_Closed_Traveling",
+        "Running HEX CCW Line Valve Condition_Opened_Closed_Partially Opened",
+        "Standby HEX CCW Line Valve Condition_Closed_Opened_Partially Opened",
         "Control Oil Cleaning Unit Check_Running_Stopped",
         "Control Oil Cleaning Unit Hour",
         "Control Oil Cleaning Unit KV",
@@ -588,7 +591,7 @@
         "Any Other Abnormalities~text"
     ],
     "GT Lube Oil System": [
-        "Lube Oil Tank Level_Normal_Above Normal_Below Normal",
+        "Lube Oil Tank Level",
         "LOP Running_A_B_E",
         "Pump Discharge Pressure",
         "Lube Oil Pump_Normal_ High Temp_High Noise_High Vibration",
@@ -597,8 +600,13 @@
         "Oil Leakage_No Leakage_Little Leakage_High Leakage",
         "Oil Temperature",
         "Lube Oil Cooling System_AB Running_A Running_B Running",
+        "Running HEX CCW Line Valve Condition_Opened_Closed_Partially Opened",
+        "Standby HEX CCW Line Valve Condition_Closed_Opened_Partially Opened",
         "Bearing Oil Leakage_No Leakage_Bearing 1 Leakage_Bearing 2 Leakage_Bearing 3 Leakage_Bearing 4 Leakage_Bearing 5 Leakage",
         "Bearing Return Flow Check_Normal_Bubble_Discolored_Discolor",
+        "Bearing 3 Return Oil Temperature",
+        "Bearing 4 Return Oil Temperature",
+        "Bearing 5 Return Oil Temperature",
         "GT Turning Gear Oil Level_Normal_Above Normal_Below Normal",
         "Oil Mist Vapour Extractor Running_A_B",
         "Oil Mist Vapour Extractor_Normal_ High Temp_High Noise_High Vibration",
@@ -960,9 +968,10 @@
         "Temperature_Normal_Abnormal",
         "Discharge Pressure",
         "Oil Filter DP",
-        "Tank Level_Normal_Above Normal_Below Normal",
-        "Oil Temp",
-        "CCW Line Valve Condition_Opened_Closed_Traveling",
+        "Tank Level",
+        "Oil Temperature",
+        "Running HEX CCW Line Valve Condition_Opened_Closed_Partially Opened",
+        "Standby HEX CCW Line Valve Condition_Closed_Opened_Partially Opened",
         "Any Leakage in System_No Leakage_Oil_Water",
         "Running Vapour Extractor_A_B",
         "Vapour Extractor Condition_Normal_ High Temperature_High Noise_High Vibration",
@@ -999,6 +1008,11 @@
         "LP Rotor Position",
         "Bearing Return Oil Check_Normal_Bubble_Discolored_Discolor",
         "Lube Oil Leakage Check_No Leakage_Bearing 1 Leakage_Bearing 2 Leakage_Bearing 3 Leakage_Bearing 4 Leakage_Bearing 5 Leakage",
+        "Bearing 1 Return Oil Temperature",
+        "Bearing 2 Return Oil Temperature",
+        "Bearing 3 Return Oil Temperature",
+        "Bearing 4 Return Oil Temperature",
+        "Bearing 5 Return Oil Temperature",
         "Steam Leakage Check_No Leakage_Little Leakage_High Leakage",
         "Noise_Normal_Abnormal",
         "Vibration_Normal_Abnormal",
@@ -1301,6 +1315,20 @@
     "CT Electric Building": [
         "Cond Make Up Pump B", "CT BD Pump A", "CT BD Pump B", "Service Water Pump A",
         "Service Water Pump B", "CT Make Up Pump A", "CT Make Up Pump B"
+    ],
+    "Lighting System": [
+        "FGC Area Lighting_Sufficient_Insufficient_Off",
+        "FGC Area Boundary Lighting_Sufficient_Insufficient_Off",
+        "CCB Area Road Lighting_Sufficient_Insufficient_Off",
+        "SUT Area Lighting_Sufficient_Insufficient_Off",
+        "GT Area Lighting_Sufficient_Insufficient_Off",
+        "ST Area Lighting_Sufficient_Insufficient_Off",
+        "HRSG Area Lighting_Sufficient_Insufficient_Off",
+        "Admin Building Area Lighting_Sufficient_Insufficient_Off",
+        "CT Area Lighting_Sufficient_Insufficient_Off",
+        "Clarifier Area Lighting_Sufficient_Insufficient_Off",
+        "Jetty Area Road Lighting_Sufficient_Insufficient_Off",
+        "WTP Area Lighting_Sufficient_Insufficient_Off",
     ],
     "HRSG and CT Dosing Pump": [
         "HRSG Chemical Dosing Shelter Pumps Oil Level_Normal_Above Normal_Below Normal",
